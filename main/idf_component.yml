@@ -1,0 +1,6 @@
+dependencies:
+  idf:
+    version: ">=5.1.0"
+
+  esp_lcd_touch_gt911: "^1"
+

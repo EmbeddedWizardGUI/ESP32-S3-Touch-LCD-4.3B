@@ -1,0 +1,263 @@
+/*******************************************************************************
+*
+* Embedded Wizard - GUI Solutions by TARA Systems
+*
+*                                                Copyright (c) TARA Systems GmbH
+*                                    written by Paul Banach and Manfred Schweyer
+*
+********************************************************************************
+*
+* This software is provided as example code to demonstrate the use of Embedded
+* Wizard and related software components. It may be used in production systems
+* after you have reviewed, tested and adapted it to your specific requirements.
+*
+* Use of this example code is subject to the Embedded Wizard license terms
+* (as published at https://www.embedded-wizard.de/legal), including in
+* particular:
+*
+*   - Embedded Wizard Terms and Conditions (EWTC)
+*   - Embedded Wizard License Agreement (EWLA)
+*   - Embedded Wizard Community License (EWCL)
+*
+* The specific agreement(s) applicable to you depend on your contractual
+* relationship with TARA Systems GmbH and/or your use of the Community License.
+*
+* Subject to your compliance with the applicable Embedded Wizard license terms
+* and/or any separate written agreement with TARA Systems, you are granted a
+* non-exclusive, worldwide, royalty-free license to use, copy, modify and
+* integrate this example code into your own software products and projects.
+* You may redistribute this code only as part of your products and not as a
+* standalone library, framework or development tool.
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND "AS AVAILABLE", WITHOUT WARRANTY OF ANY
+* KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT.
+* TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL TARA
+* SYSTEMS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+* ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+* WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*
+********************************************************************************
+*
+* DESCRIPTION:
+*   This file is part of the interface (glue layer) between an Embedded Wizard 
+*   generated UI application and the board support package (BSP) of a dedicated
+*   target.
+*   This template provides access to some LEDs and buttons of the board.
+*
+*******************************************************************************/
+
+#ifndef EW_BSP_INOUT_H
+#define EW_BSP_INOUT_H
+
+
+#ifdef __cplusplus
+  extern "C"
+  {
+#endif
+
+
+/*******************************************************************************
+* CALLBACK:
+*   TButtonCallback
+*
+* DESCRIPTION:
+*   A function of this type has to be set with EwBspButtonConfig() to get
+*   notified, everytime the hardware button is pressed or released.
+*
+* ARGUMENTS:
+*   aButtonPresssed
+*
+* RETURN VALUE:
+*   None
+*
+*******************************************************************************/
+typedef void ( * TButtonCallback ) ( int aButtonPresssed );
+
+
+/*******************************************************************************
+* FUNCTION:
+*   EwBspInOutInitButton
+*
+* DESCRIPTION:
+*   Configures one hardware button of the board used for demo applications.
+*
+* ARGUMENTS:
+*   aButtonCallback - The button callback.
+*
+* RETURN VALUE:
+*   None
+*
+*******************************************************************************/
+void EwBspInOutInitButton
+(
+  TButtonCallback             aButtonCallback
+);
+
+
+/*******************************************************************************
+* FUNCTION:
+*   EwBspInOutInitLed
+*
+* DESCRIPTION:
+*   Configures one LED of the board used for demo applications.
+*
+* ARGUMENTS:
+*   None
+*
+* RETURN VALUE:
+*   None
+*
+*******************************************************************************/
+void EwBspInOutInitLed
+( 
+  void
+);
+
+
+/*******************************************************************************
+* FUNCTION:
+*   EwBspInOutLedOn
+*
+* DESCRIPTION:
+*   Switch LED on (used for demo applications).
+*
+* ARGUMENTS:
+*   None
+*
+* RETURN VALUE:
+*   None
+*
+*******************************************************************************/
+void EwBspInOutLedOn
+( 
+  void 
+);
+
+
+/*******************************************************************************
+* FUNCTION:
+*   EwBspInOutLedOff
+*
+* DESCRIPTION:
+*   Switch LED off (used for demo applications).
+*
+* ARGUMENTS:
+*   None
+*
+* RETURN VALUE:
+*   None
+*
+*******************************************************************************/
+void EwBspInOutLedOff
+( 
+  void
+);
+
+
+/*******************************************************************************
+* FUNCTION:
+*   EwBspInOutEventHandler
+*
+* DESCRIPTION:
+*   The function EwBspInOutEventHandler is called from GPIO driver in case of
+*   an input event.
+*
+* ARGUMENTS:
+*   aEventId - An optional target specific event ID.
+*
+* RETURN VALUE:
+*   None.
+*
+*******************************************************************************/
+void EwBspInOutEventHandler
+(
+  int aEventId
+);
+
+
+/*******************************************************************************
+* FUNCTION:
+*   EwBspInOutSetGeneratorStartRelay
+*
+* DESCRIPTION:
+*   Drives the START open-drain output (CH422G OD0 / DO0) of the generator
+*   remote-control connector. As a safety policy, passing 0 (inactive) also
+*   forces the STOP relay to inactive - START and STOP must never be asserted
+*   simultaneously.
+*
+* ARGUMENTS:
+*   aActive - 1 to assert the START line, 0 to release both lines.
+*
+*******************************************************************************/
+void EwBspInOutSetGeneratorStartRelay( int aActive );
+
+
+/*******************************************************************************
+* FUNCTION:
+*   EwBspInOutSetGeneratorStopRelay
+*
+* DESCRIPTION:
+*   Drives the STOP open-drain output (CH422G OD1 / DO1) of the generator
+*   remote-control connector. As a safety policy, passing 0 (inactive) also
+*   forces the START relay to inactive.
+*
+* ARGUMENTS:
+*   aActive - 1 to assert the STOP line, 0 to release both lines.
+*
+*******************************************************************************/
+void EwBspInOutSetGeneratorStopRelay( int aActive );
+
+
+/*******************************************************************************
+* FUNCTION:
+*   EwBspInOutSetBacklight
+*
+* DESCRIPTION:
+*   Turns the LCD backlight on or off via the CH422G IO expander (IO2).
+*   Re-asserts the other CH422G IO bits (touch reset, LCD reset, SD CS) to
+*   their normal operating state, so this function is safe to call repeatedly.
+*
+* ARGUMENTS:
+*   aOn - 1 = backlight on, 0 = backlight off.
+*
+*******************************************************************************/
+void EwBspInOutSetBacklight( int aOn );
+
+
+/*******************************************************************************
+* FUNCTION:
+*   EwBspInOutGetCityPowerState
+*
+* DESCRIPTION:
+*   Reads the CityPower digital input sense line (CH422G IO5 / DI1).
+*
+* RETURN VALUE:
+*   1 if mains power is present, 0 otherwise.
+*
+*******************************************************************************/
+int EwBspInOutGetCityPowerState( void );
+
+
+/*******************************************************************************
+* FUNCTION:
+*   EwBspInOutGetGeneratorBackupState
+*
+* DESCRIPTION:
+*   Reads the GeneratorBackup digital input sense line (CH422G IO0 / DI0).
+*
+* RETURN VALUE:
+*   1 if the generator is currently supplying backup power, 0 otherwise.
+*
+*******************************************************************************/
+int EwBspInOutGetGeneratorBackupState( void );
+
+
+#ifdef __cplusplus
+  }
+#endif
+
+#endif /* EW_BSP_INOUT_H */
+
+
+/* msy */

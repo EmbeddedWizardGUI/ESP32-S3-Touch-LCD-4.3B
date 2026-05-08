@@ -1,0 +1,542 @@
+﻿$version 15.02
+
+// Inline code block: pulls in BSP / driver headers and hosts the static
+// state previously kept in DeviceDriver.c. Everything app-specific lives
+// here now - DeviceDriver.c/.h is no longer included.
+$rect <20,50,240,90>
+inline Inline
+{
+  #include <string.h>
+  #include <stdio.h>
+  #include "ewrte.h"
+  #include "wifi.h"
+  #include "ew_bsp_inout.h"
+
+  /* time between two consecutive automatic scans, in milliseconds */
+  #define WS_SCAN_INTERVAL_MS  30000
+
+  /* upper bound for the AP record array kept in BSS */
+  #define WS_MAX_RECORDS       20
+
+  /* state previously hosted in DeviceDriver.c WIFI_SCANNER gate */
+  static volatile int   ws_scan_in_progress      = 0;
+  static volatile int   ws_manual_scan_requested = 0;
+  static unsigned long  ws_last_scan_tick        = 0;
+
+  /* shadow values so we only call the GUI on real changes */
+  static int            ws_last_is_ready         = -1;
+  static int            ws_last_is_scanning      = -1;
+
+  /* heap-of-stack scratch for scan results - kept in BSS */
+  static wifi_ap_info_t ws_scan_records[ WS_MAX_RECORDS ];
+
+}
+
+// -----------------------------------------------------------------------------
+// Application class - the visible GUI of the WifiScanner example.
+// -----------------------------------------------------------------------------
+$rect <20,170,240,210>
+$output false
+class Application : Core::Root
+{
+  $rect <820,80,1040,120>
+  inherited property Bounds = <0,0,800,480>;
+
+  // Reference the device autoobject for the entire lifetime of the application
+  // so it is not collected by the garbage collector while the GUI is running.
+  $rect <820,200,1040,240>
+  var Application::DeviceClass Device = Application::Device;
+
+  // ----- background ----------------------------------------------------------
+  $rect <20,20,160,60>
+  object Views::Rectangle Background
+  {
+    preset Bounds = <0,0,800,480>;
+    preset Color = #1A1A1AFF;
+  }
+
+  // ----- header --------------------------------------------------------------
+  $rect <20,20,160,60>
+  object Views::Rectangle HeaderBar
+  {
+    preset Bounds = <0,0,800,90>;
+    preset Color = #2D2D2DFF;
+  }
+
+  $rect <20,20,160,60>
+  object Views::Text Title
+  {
+    preset Bounds = <30,15,500,75>;
+    preset String = "Wi-Fi Scanner";
+    preset Font = Application::FontTitle;
+    preset Color = #FFFFFFFF;
+    preset Alignment = Views::TextAlignment[AlignHorzLeft, AlignVertCenter];
+  }
+
+  $rect <20,20,160,60>
+  object Views::Text StatusLine
+  {
+    preset Bounds = <30,100,500,140>;
+    preset String = "initializing...";
+    preset Font = Application::FontBody;
+    preset Color = #B0B0B0FF;
+    preset Alignment = Views::TextAlignment[AlignHorzLeft, AlignVertCenter];
+  }
+
+  // ----- scan button ---------------------------------------------------------
+  $rect <20,20,160,60>
+  object Views::Rectangle ScanButtonShape
+  {
+    preset Bounds = <620,20,770,70>;
+    preset Color = #2D7DD2FF;
+  }
+
+  $rect <20,20,160,60>
+  object Views::Text ScanButtonLabel
+  {
+    preset Bounds = <620,20,770,70>;
+    preset String = "SCAN";
+    preset Font = Application::FontButton;
+    preset Color = #FFFFFFFF;
+    preset Alignment = Views::TextAlignment[AlignHorzCenter, AlignVertCenter];
+  }
+
+  $rect <20,20,160,60>
+  object Core::SimpleTouchHandler ScanButtonTouch
+  {
+    preset Point4 = <620,20>;
+    preset Point3 = <770,20>;
+    preset Point2 = <770,70>;
+    preset Point1 = <620,70>;
+    preset OnPress = OnScanPressed;
+  }
+
+  // ----- result list ---------------------------------------------------------
+  // A single multi-line text view drawn from the device class arrays. It is
+  // refreshed periodically by RefreshTimer (cheap, sidesteps observer wiring
+  // for this minimal layout - feel free to redesign in EW Studio).
+  $rect <20,20,160,60>
+  object Views::Rectangle ResultsBackground
+  {
+    preset Bounds = <20,150,780,460>;
+    preset Color = #232323FF;
+  }
+
+  $rect <20,20,160,60>
+  object Views::Text ResultsText
+  {
+    preset Bounds = <40,160,760,450>;
+    preset String = "";
+    preset Font = Application::FontList;
+    preset Color = #DDDDDDFF;
+    preset Alignment = Views::TextAlignment[AlignHorzLeft, AlignVertTop];
+    preset WrapText = false;
+  }
+
+  // ----- periodic refresh ----------------------------------------------------
+  $rect <820,260,1040,300>
+  object Core::Timer RefreshTimer
+  {
+    preset OnTrigger = OnRefresh;
+    preset Period = 500;
+    preset Enabled = true;
+  }
+
+  // ----- slot: scan button pressed ------------------------------------------
+  $rect <820,320,1040,360>
+  slot OnScanPressed
+  {
+    sender;
+    signal Device.RequestScan;
+  }
+
+  // ----- helper: short security label for a WIFI_AUTH_* enum value ----------
+  // Maps the IDF authmode constant to a short, fixed-width-friendly string.
+  $rect <820,260,1040,300>
+  method string AuthLabel( arg int32 aMode )
+  {
+    if ( aMode ==  0 ) return "Open  ";
+    if ( aMode ==  1 ) return "WEP   ";
+    if ( aMode ==  2 ) return "WPA   ";
+    if ( aMode ==  3 ) return "WPA2  ";
+    if ( aMode ==  4 ) return "WPA1/2";
+    if ( aMode ==  5 ) return "ENT   ";
+    if ( aMode ==  6 ) return "WPA3  ";
+    if ( aMode ==  7 ) return "WPA2/3";
+    if ( aMode ==  8 ) return "WAPI  ";
+    if ( aMode ==  9 ) return "OWE   ";
+    if ( aMode == 10 ) return "WPA3-E";
+    return "?     ";
+  }
+
+  // ----- slot: refresh timer fired ------------------------------------------
+  $rect <820,380,1040,420>
+  slot OnRefresh
+  {
+    sender;
+
+    /* status line */
+    if ( Device.IsScanning )
+      StatusLine.String = "scanning...";
+    else if ( !Device.IsReady )
+      StatusLine.String = "Wi-Fi initializing...";
+    else
+      StatusLine.String = string( Device.ResultCount ) + " network(s) found";
+
+    /* results - one line per AP, up to 8 visible */
+    var string s = "";
+    var int32  i = 0;
+    var int32  n = Device.ResultCount;
+    if ( n > 8 )
+      n = 8;
+
+    while ( i < n )
+    {
+      s = s + "[" + string( i ) + "]  "
+        + string( Device.ResultRssi[ i ]) + " dBm  ch "
+        + string( Device.ResultChannel[ i ]) + "  "
+        + AuthLabel( Device.ResultAuthmode[ i ]) + "  "
+        + Device.ResultSsid[ i ] + "\n";
+      i = i + 1;
+    }
+
+    if ( n == 0 )
+      s = "(no networks yet - press SCAN or wait...)";
+
+    ResultsText.String = s;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// DeviceClass - the contract between the GUI and DeviceDriver.c.
+// -----------------------------------------------------------------------------
+$rect <20,260,240,300>
+$output false
+class DeviceClass
+{
+  // ----- lifecycle: bring up the Wi-Fi BSP and the polling timer -----------
+  $rect <0,0,220,40>
+  inherited method Init()
+  {
+    aArg;
+
+    $if !$prototyper
+      native
+      {
+        wifi_init();
+        EwBspInOutSetBacklight( 1 );
+      }
+    $endif
+  }
+
+  $rect <220,0,440,40>
+  inherited method Done()
+  {
+    $if !$prototyper
+      native
+      {
+        /* nothing to free - wifi driver stays initialized for the
+           lifetime of the application; the Pump timer is owned by the
+           autoobject and is torn down with it. */
+      }
+    $endif
+  }
+
+  // ----- status (C -> GUI scalars) ------------------------------------------
+  $rect <0,60,220,100>
+  property bool IsReady = false;
+
+  $rect <0,100,220,140>
+  property bool IsScanning = false;
+
+  $rect <0,140,220,180>
+  property int32 ResultCount = 0;
+
+  $rect <0,180,220,220>
+  property int32 LastScanTimestamp = 0;
+
+  // ----- per-AP result data (parallel arrays) -------------------------------
+  $rect <0,240,220,280>
+  array string ResultSsid[ 20 ];
+
+  $rect <0,280,220,320>
+  array string ResultBssid[ 20 ];
+
+  $rect <0,320,220,360>
+  array int32 ResultRssi[ 20 ];
+
+  $rect <0,360,220,400>
+  array int32 ResultChannel[ 20 ];
+
+  $rect <0,400,220,440>
+  array int32 ResultAuthmode[ 20 ];
+
+  // ----- C -> GUI: push one AP record into the arrays -----------------------
+  $rect <240,240,460,280>
+  $output true
+  method void UpdateScanResult( arg int32 aIndex, arg string aSsid, arg string aBssid, arg int32 aRssi, arg int32 aChannel, arg int32 aAuthmode )
+  {
+    if (( aIndex < 0 ) || ( aIndex >= 20 ))
+      return;
+
+    ResultSsid[ aIndex ]     = aSsid;
+    ResultBssid[ aIndex ]    = aBssid;
+    ResultRssi[ aIndex ]     = aRssi;
+    ResultChannel[ aIndex ]  = aChannel;
+    ResultAuthmode[ aIndex ] = aAuthmode;
+  }
+
+  // ----- C -> GUI: finalize a scan (count + timestamp, notify observers) ----
+  $rect <240,140,460,180>
+  $output true
+  method void FinalizeScanResults( arg int32 aCount, arg int32 aTimestamp )
+  {
+    if ( aCount != pure ResultCount )
+    {
+      pure ResultCount = aCount;
+      notifyobservers ^ResultCount;
+    }
+
+    if ( aTimestamp != pure LastScanTimestamp )
+    {
+      pure LastScanTimestamp = aTimestamp;
+      notifyobservers ^LastScanTimestamp;
+    }
+  }
+
+  // ----- C -> GUI: push status flags ----------------------------------------
+  $rect <240,60,460,100>
+  $output true
+  method void UpdateStatus( arg bool aIsReady, arg bool aIsScanning )
+  {
+    if ( aIsReady != pure IsReady )
+    {
+      pure IsReady = aIsReady;
+      notifyobservers ^IsReady;
+    }
+
+    if ( aIsScanning != pure IsScanning )
+    {
+      pure IsScanning = aIsScanning;
+      notifyobservers ^IsScanning;
+    }
+  }
+
+  // ----- GUI -> C: request a manual scan ------------------------------------
+  $rect <0,440,220,480>
+  slot RequestScan
+  {
+    sender;
+
+    $if !$prototyper
+      native
+      {
+        ws_manual_scan_requested = 1;
+      }
+    $endif
+  }
+
+  // ----- BSP polling pump --------------------------------------------------
+  // Fires every 200 ms on the GUI task, so all Chora state mutations and
+  // ApplicationDeviceClass__Update... calls happen in the right thread
+  // without needing EwInvoke / EwInvokeCopy.
+  $rect <240,440,460,480>
+  object Core::Timer Pump
+  {
+    preset OnTrigger = OnPump;
+    preset Period = 200;
+    preset Enabled = true;
+  }
+
+  $rect <0,500,220,540>
+  slot OnPump
+  {
+    sender;
+
+    /* ----- 1) drain scan results, if any ---------------------------- */
+    var int32 newCount = -1;        /* -1 = no fresh results this tick */
+    var int32 timestamp = 0;
+
+    $if !$prototyper
+      native ( newCount, timestamp )
+      {
+        EwBspInOutSetBacklight( 1 );
+
+        if ( wifi_has_scan_results())
+        {
+          newCount            = wifi_fetch_scan_results( ws_scan_records, WS_MAX_RECORDS );
+          ws_scan_in_progress = 0;
+          timestamp           = (XInt32)EwGetTicks();
+        }
+      }
+    $endif
+
+    if ( newCount >= 0 )
+    {
+      var int32 i;
+      for ( i = 0; i < newCount; i = i + 1 )
+      {
+        var string ssid;
+        var string bssid;
+        var int32  rssi     = 0;
+        var int32  channel  = 0;
+        var int32  authmode = 0;
+
+        $if !$prototyper
+          native ( i, ssid, bssid, rssi, channel, authmode )
+          {
+            char bssidStr[ 18 ];
+            snprintf( bssidStr, sizeof( bssidStr ),
+              "%02x:%02x:%02x:%02x:%02x:%02x",
+              ws_scan_records[ i ].bssid[ 0 ], ws_scan_records[ i ].bssid[ 1 ],
+              ws_scan_records[ i ].bssid[ 2 ], ws_scan_records[ i ].bssid[ 3 ],
+              ws_scan_records[ i ].bssid[ 4 ], ws_scan_records[ i ].bssid[ 5 ]);
+
+            ssid     = EwNewStringAnsi( ws_scan_records[ i ].ssid );
+            bssid    = EwNewStringAnsi( bssidStr );
+            rssi     = (XInt32)ws_scan_records[ i ].rssi;
+            channel  = (XInt32)ws_scan_records[ i ].channel;
+            authmode = (XInt32)ws_scan_records[ i ].authmode;
+          }
+        $endif
+
+        UpdateScanResult( i, ssid, bssid, rssi, channel, authmode );
+      }
+
+      FinalizeScanResults( newCount, timestamp );
+    }
+
+    /* ----- 2) trigger next scan + push status changes --------------- */
+    var bool isReady          = false;
+    var bool isScanning       = false;
+    var bool readyChanged     = false;
+    var bool scanningChanged  = false;
+
+    $if !$prototyper
+      native ( isReady, isScanning, readyChanged, scanningChanged )
+      {
+        int ready          = wifi_is_ready();
+        unsigned long now  = EwGetTicks();
+        int intervalElapsed = ( ws_last_scan_tick == 0 ) ||
+                              (( now - ws_last_scan_tick ) >= WS_SCAN_INTERVAL_MS );
+
+        if ( ready && !ws_scan_in_progress &&
+             ( ws_manual_scan_requested || intervalElapsed ))
+        {
+          if ( wifi_start_scan())
+          {
+            ws_last_scan_tick        = now;
+            ws_scan_in_progress      = 1;
+            ws_manual_scan_requested = 0;
+          }
+        }
+
+        readyChanged    = ( ready != ws_last_is_ready ) ? 1 : 0;
+        scanningChanged = ( ws_scan_in_progress != ws_last_is_scanning ) ? 1 : 0;
+
+        ws_last_is_ready    = ready;
+        ws_last_is_scanning = ws_scan_in_progress;
+
+        isReady    = ready ? 1 : 0;
+        isScanning = ws_scan_in_progress ? 1 : 0;
+      }
+    $endif
+
+    if ( readyChanged || scanningChanged )
+      UpdateStatus( isReady, isScanning );
+  }
+
+  // Directives to adapt the order of the above members according to how these members
+  // where arranged when the project content was stored. In this manner the storage
+  // and the expected order of the members don't depend. Merging of changes in the
+  // project files is simplified.
+  $member Done
+  $member Init
+  $member IsReady
+  $member UpdateStatus
+  $member IsScanning
+  $member ResultCount
+  $member FinalizeScanResults
+  $member LastScanTimestamp
+  $member ResultSsid
+  $member ResultBssid
+  $member ResultRssi
+  $member ResultChannel
+  $member ResultAuthmode
+  $member UpdateScanResult
+  $member RequestScan
+  $member Pump
+  $member OnPump
+}
+
+// Singleton instance of the device interface.
+$rect <20,300,240,340>
+autoobject Application::DeviceClass Device;
+
+// -----------------------------------------------------------------------------
+// Resources
+// -----------------------------------------------------------------------------
+$rect <250,50,450,90>
+$output false
+resource Resources::Font FontTitle
+{
+  attr fontname FontName = Arial;
+  attr fontheight Height = 40;
+  attr fontquality Quality = High;
+  attr fontranges Ranges = 0x20-0xFF;
+  attr fontaspectratio AspectRatio = 1.0;
+  attr fontbold Bold = true;
+  attr fontitalic Italic = false;
+  attr fontkerning Kerning = true;
+  attr fontheightmode HeightMode = Compatible;
+  attr fontrowdistance RowDistance;
+}
+
+$rect <450,50,650,90>
+$output false
+resource Resources::Font FontBody
+{
+  attr fontname FontName = Arial;
+  attr fontheight Height = 22;
+  attr fontquality Quality = High;
+  attr fontranges Ranges = 0x20-0xFF;
+  attr fontaspectratio AspectRatio = 1.0;
+  attr fontbold Bold = false;
+  attr fontitalic Italic = false;
+  attr fontkerning Kerning = true;
+  attr fontheightmode HeightMode = Compatible;
+  attr fontrowdistance RowDistance;
+}
+
+$rect <650,50,850,90>
+$output false
+resource Resources::Font FontButton
+{
+  attr fontname FontName = Arial;
+  attr fontheight Height = 26;
+  attr fontquality Quality = High;
+  attr fontranges Ranges = 0x20-0xFF;
+  attr fontaspectratio AspectRatio = 1.0;
+  attr fontbold Bold = true;
+  attr fontitalic Italic = false;
+  attr fontkerning Kerning = true;
+  attr fontheightmode HeightMode = Compatible;
+  attr fontrowdistance RowDistance;
+}
+
+// Monospaced font for the result list - lines up the columns nicely.
+$rect <250,90,450,130>
+$output false
+resource Resources::Font FontList
+{
+  attr fontname FontName = Courier New;
+  attr fontheight Height = 22;
+  attr fontquality Quality = High;
+  attr fontranges Ranges = 0x20-0xFF;
+  attr fontaspectratio AspectRatio = 1.0;
+  attr fontbold Bold = false;
+  attr fontitalic Italic = false;
+  attr fontkerning Kerning = true;
+  attr fontheightmode HeightMode = Compatible;
+  attr fontrowdistance RowDistance;
+}
