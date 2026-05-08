@@ -1,6 +1,6 @@
 # Embedded Wizard Build Environment for Waveshare ESP32-S3-Touch-LCD-4.3B
 
-![Screenshots](https://doc.embedded-wizard.de/data/Other/GitHub/ESP32-S3-Touch-LCD-4.3B/screenshots_v1.jpg)
+![Screenshots](https://doc.embedded-wizard.de/data/Other/GitHub/ESP32-S3-Touch-LCD-4.3B/screenshots_v2.jpg)
 
 ## About Embedded Wizard
 
