@@ -53,10 +53,8 @@
 
 #include "ewlocale.h"
 #include "_GraphicsCanvas.h"
-#include "_ResourcesBitmap.h"
 #include "_ResourcesFont.h"
 #include "Graphics.h"
-#include "Resources.h"
 #include "Views.h"
 
 /* Strings for the language 'Default'. */
@@ -79,29 +77,7 @@ EW_CONST_STRING_PRAGMA static const unsigned short _StringsDefault0[] =
   0x0069, 0x0061, 0x006C, 0x0069, 0x007A, 0x0065, 0x0064, 0x0020, 0x0077, 0x0069,
   0x0074, 0x0068, 0x0020, 0x0061, 0x0020, 0x0067, 0x0072, 0x0061, 0x0070, 0x0068,
   0x0069, 0x0063, 0x0073, 0x0020, 0x0065, 0x006E, 0x0067, 0x0069, 0x006E, 0x0065,
-  0x0020, 0x0062, 0x0069, 0x0074, 0x006D, 0x0061, 0x0070, 0x0000, 0xC557, 0x0053,
-  0x0063, 0x0061, 0x006C, 0x0065, 0x0042, 0x0069, 0x0074, 0x006D, 0x0061, 0x0070,
-  0x0028, 0x0029, 0x0020, 0x006F, 0x0070, 0x0065, 0x0072, 0x0061, 0x0074, 0x0069,
-  0x006F, 0x006E, 0x0020, 0x0068, 0x0061, 0x0073, 0x0020, 0x0062, 0x0065, 0x0065,
-  0x006E, 0x0020, 0x006F, 0x006D, 0x0069, 0x0074, 0x0074, 0x0065, 0x0064, 0x0020,
-  0x0064, 0x0075, 0x0065, 0x0020, 0x0074, 0x006F, 0x0020, 0x0074, 0x0068, 0x0065,
-  0x0020, 0x0072, 0x0065, 0x0073, 0x0075, 0x006C, 0x0074, 0x0069, 0x006E, 0x0067,
-  0x0020, 0x0061, 0x0072, 0x0065, 0x0061, 0x0020, 0x0062, 0x0065, 0x0069, 0x006E,
-  0x0067, 0x0020, 0x0077, 0x0069, 0x0064, 0x0065, 0x0072, 0x0020, 0x006F, 0x0072,
-  0x0020, 0x0068, 0x0069, 0x0067, 0x0068, 0x0065, 0x0072, 0x0020, 0x0074, 0x0068,
-  0x0061, 0x006E, 0x0020, 0x0034, 0x0030, 0x0036, 0x0039, 0x0020, 0x0070, 0x0069,
-  0x0078, 0x0065, 0x006C, 0x002E, 0x0000, 0xC557, 0x0044, 0x0072, 0x0061, 0x0077,
-  0x0054, 0x0068, 0x0069, 0x0063, 0x006B, 0x004C, 0x0069, 0x006E, 0x0065, 0x0028,
-  0x0029, 0x0020, 0x006F, 0x0070, 0x0065, 0x0072, 0x0061, 0x0074, 0x0069, 0x006F,
-  0x006E, 0x0020, 0x0068, 0x0061, 0x0073, 0x0020, 0x0062, 0x0065, 0x0065, 0x006E,
-  0x0020, 0x006F, 0x006D, 0x0069, 0x0074, 0x0074, 0x0065, 0x0064, 0x0020, 0x0064,
-  0x0075, 0x0065, 0x0020, 0x0074, 0x006F, 0x0020, 0x0074, 0x0068, 0x0065, 0x0020,
-  0x0072, 0x0065, 0x0073, 0x0075, 0x006C, 0x0074, 0x0069, 0x006E, 0x0067, 0x0020,
-  0x0061, 0x0072, 0x0065, 0x0061, 0x0020, 0x0062, 0x0065, 0x0069, 0x006E, 0x0067,
-  0x0020, 0x0077, 0x0069, 0x0064, 0x0065, 0x0072, 0x0020, 0x006F, 0x0072, 0x0020,
-  0x0068, 0x0069, 0x0067, 0x0068, 0x0065, 0x0072, 0x0020, 0x0074, 0x0068, 0x0061,
-  0x006E, 0x0020, 0x0034, 0x0030, 0x0036, 0x0039, 0x0020, 0x0070, 0x0069, 0x0078,
-  0x0065, 0x006C, 0x002E, 0x0000
+  0x0020, 0x0062, 0x0069, 0x0074, 0x006D, 0x0061, 0x0070, 0x0000
 };
 
 /* Constant values used in this 'C' module only. */
@@ -111,10 +87,6 @@ static const XColor _Const0002 = { 0x00, 0x00, 0x00, 0x00 };
 static const XRect _Const0003 = {{ 0, 0 }, { 0, 0 }};
 static const XStringRes _Const0004 = { _StringsDefault0, 0x003F };
 static const XStringRes _Const0005 = { _StringsDefault0, 0x0072 };
-static const XStringRes _Const0006 = { _StringsDefault0, 0x00B3 };
-static const XStringRes _Const0007 = { _StringsDefault0, 0x011E };
-static const XPoint _Const0008 = { 1, 1 };
-static const XPoint _Const0009 = { 2, 2 };
 
 /* Initializer for the class 'Graphics::Canvas' */
 void GraphicsCanvas__Init( GraphicsCanvas _this, XObject aLink, XHandle aArg )
@@ -311,73 +283,6 @@ GraphicsCanvas GraphicsCanvas__AttachBitmap( void* _this, XHandle aBitmap )
   return GraphicsCanvas_AttachBitmap((GraphicsCanvas)_this, aBitmap );
 }
 
-/* The method DrawRoundedShadow() renders a shadow around a rectangle aDstRect with 
-   color determined by aColor. The corners of the rectangular shape can be rounded 
-   by radius specified in the parameters aRadiusTL, aRadiusTR, aRadiusBR and aRadiusBL. 
-   The parameter aBlurRadius determines the shadow radius.
-   The parameter aClip limits the drawing operation. Pixel lying outside this area 
-   remain unchanged. The last aBlend parameter controls the mode how drawn pixel 
-   are combined with the pixel already existing in the destination bitmap. If aBlend 
-   is 'true', the drawn pixel are alpha-blended with the background, otherwise the 
-   drawn pixel will overwrite the old content.
-   Please note, except the WebGL platform, the method uses a box blur algorithm 
-   without involving any GPU to perform the blur operation. This guarantees similar 
-   results on all target systems with the blur radius not being restricted to any 
-   discrete value. In case of the WebGL platform, the blur effect is performed natively 
-   using functionality available in the WebBrowser. */
-void GraphicsCanvas_DrawRoundedShadow( GraphicsCanvas _this, XRect aClip, XRect 
-  aDstRect, XInt32 aRadiusTL, XInt32 aRadiusTR, XInt32 aRadiusBR, XInt32 aRadiusBL, 
-  XInt32 aBlurRadius, XColor aColor, XBool aBlend )
-{
-  XHandle dstBitmap;
-  XInt32 dstFrameNo;
-
-  if ( _this->Super1.bitmap == 0 )
-    ResourcesBitmap__Update( _this );
-
-  if ( _this->Super1.bitmap == 0 )
-    return;
-
-  dstBitmap = _this->Super1.bitmap;
-  dstFrameNo = _this->DstFrameNr;
-  {
-    EwDrawRoundedShadow((XBitmap*)dstBitmap, dstFrameNo, aClip, aDstRect, aRadiusTL, aRadiusTR, 
-                         aRadiusBR, aRadiusBL, aBlurRadius, aColor, aBlend );
-  }
-}
-
-/* The method FillRoundedRectangle() fills an area of canvas. The area is determined 
-   by the parameter aDstRect. The parameters aColorTL, aColorTR, aColorBL, aColorBR 
-   determine the colors at the corresponding corners of the aDstRect area. The corners 
-   of the resulting rectangular shape can be rounded by radius specified in the 
-   parameters aRadiusTL, aRadiusTR, aRadiusBR and aRadiusBL.
-   The parameter aClip limits the drawing operation. Pixel lying outside this area 
-   remain unchanged. The last aBlend parameter controls the mode how drawn pixel 
-   are combined with the pixel already existing in the destination bitmap. If aBlend 
-   is 'true', the drawn pixel are alpha-blended with the background, otherwise the 
-   drawn pixel will overwrite the old content. */
-void GraphicsCanvas_FillRoundedRectangle( GraphicsCanvas _this, XRect aClip, XRect 
-  aDstRect, XInt32 aRadiusTL, XInt32 aRadiusTR, XInt32 aRadiusBR, XInt32 aRadiusBL, 
-  XColor aColorTL, XColor aColorTR, XColor aColorBR, XColor aColorBL, XBool aBlend )
-{
-  XHandle dstBitmap;
-  XInt32 dstFrameNo;
-
-  if ( _this->Super1.bitmap == 0 )
-    ResourcesBitmap__Update( _this );
-
-  if ( _this->Super1.bitmap == 0 )
-    return;
-
-  dstBitmap = _this->Super1.bitmap;
-  dstFrameNo = _this->DstFrameNr;
-  {
-    EwFillRoundedRectangle((XBitmap*)dstBitmap, dstFrameNo, aClip, aDstRect, aRadiusTL, 
-                            aRadiusTR, aRadiusBR, aRadiusBL, aColorTL, aColorTR, aColorBR,
-                            aColorBL, aBlend );
-  }
-}
-
 /* The method DrawText() draws the text row passed in the parameter aString into 
    the canvas. The font to draw the text is passed in the parameter aFont. The parameter 
    aOffset determines within aString the sign to start the drawing operation. If 
@@ -446,194 +351,6 @@ void GraphicsCanvas_DrawText( GraphicsCanvas _this, XRect aClip, ResourcesFont a
   }
 }
 
-/* The method DrawBitmapFrame() draws a free scalable frame by composing it of bitmap 
-   segments. These segments are used to draw the frame's corners, to fill its edges 
-   and to fill its interior area. The bitmap has thus to contain nine equal segments 
-   arranged in three rows and three columns. The top-left segment e.g. is used to 
-   draw the top-left corner of the frame. In contrast, the top-middle segment corresponds 
-   to the frame's top edge. If the edge is wider than the segment, multiple copies 
-   of the segment are used to fill the entire edge. In this manner the entire frame 
-   is composed by simply copying bitmap segments.
-   The bitmap is specified in the parameter aBitmap. In case of a multi-frame bitmap 
-   the desired frame can be selected in the parameter aFrameNr. The resulting size 
-   of the drawn frame is specified by aDstRect parameter. The parameter aEdges control 
-   which edges are drawn and which are omitted. Optionally the copied pixel can 
-   be modulated by a color gradient specified by the four parameters aColorTL .. 
-   aColorBL.
-   An additional clipping area aClip limits the operation. All pixel lying outside 
-   this area will not be drawn. The last aBlend parameter controls the mode how 
-   drawn pixel are combined with the pixel already existing in the destination bitmap. 
-   If aBlend is 'true', the drawn pixel are alpha-blended with the background, otherwise 
-   the drawn pixel will overwrite the old content. */
-void GraphicsCanvas_DrawBitmapFrame( GraphicsCanvas _this, XRect aClip, ResourcesBitmap 
-  aBitmap, XInt32 aFrameNr, XRect aDstRect, XSet aEdges, XColor aColorTL, XColor 
-  aColorTR, XColor aColorBR, XColor aColorBL, XBool aBlend )
-{
-  XHandle dstBitmap;
-  XHandle srcBitmap;
-  XInt32 dstFrameNo;
-  XRect srcRect;
-  XBool left;
-  XBool top;
-  XBool right;
-  XBool bottom;
-  XBool interior;
-
-  if ( _this->Super1.bitmap == 0 )
-    ResourcesBitmap__Update( _this );
-
-  if ( _this->Super1.bitmap == 0 )
-    return;
-
-  if ((((( aBitmap == 0 ) || ( aBitmap->bitmap == 0 )) || !aEdges ) || ( aFrameNr 
-      < 0 )) || ( aFrameNr >= aBitmap->NoOfFrames ))
-    return;
-
-  dstBitmap = _this->Super1.bitmap;
-  srcBitmap = aBitmap->bitmap;
-  dstFrameNo = _this->DstFrameNr;
-  srcRect = EwNewRect2Point( _Const0000, aBitmap->FrameSize );
-  left = (( aEdges & GraphicsEdgesLeft ) == GraphicsEdgesLeft );
-  top = (( aEdges & GraphicsEdgesTop ) == GraphicsEdgesTop );
-  right = (( aEdges & GraphicsEdgesRight ) == GraphicsEdgesRight );
-  bottom = (( aEdges & GraphicsEdgesBottom ) == GraphicsEdgesBottom );
-  interior = (( aEdges & GraphicsEdgesInterior ) == GraphicsEdgesInterior );
-  {
-    EwDrawBitmapFrame((XBitmap*)dstBitmap, (XBitmap*)srcBitmap, dstFrameNo, aFrameNr,
-                       aClip, aDstRect, srcRect, left, top, right, bottom,
-                       interior, aColorTL, aColorTR, aColorBR, aColorBL, aBlend );
-  }
-}
-
-/* The method ScaleBitmap() copies and scales an area of a aBitmap into the canvas. 
-   The bitmap is specified in the parameter aBitmap and the desired area to copy 
-   in aSrcRect. In case of a multi-frame bitmap the desired frame can be selected 
-   in the parameter aFrameNr.
-   The destination area in canvas is determined by the parameter aDstRect. The parameters 
-   aColorTL, aColorTR, aColorBL, aColorBR determine the colors or opacities at the 
-   corresponding corners of the aDstRect area.
-   The parameter aClip limits the drawing operation. Pixel lying outside this area 
-   remain unchanged. The aBlend parameter controls the mode how drawn pixel are 
-   combined with the pixel already existing in the destination bitmap. If aBlend 
-   is 'true', the drawn pixel are alpha-blended with the background, otherwise the 
-   drawn pixel will overwrite the old content. The last parameter aFilter controls 
-   the bi-linear filter. If aFilter is 'true', the source bitmap pixel will be bi-linear 
-   filtered in order to get better output. */
-void GraphicsCanvas_ScaleBitmap( GraphicsCanvas _this, XRect aClip, ResourcesBitmap 
-  aBitmap, XInt32 aFrameNr, XRect aDstRect, XRect aSrcRect, XColor aColorTL, XColor 
-  aColorTR, XColor aColorBR, XColor aColorBL, XBool aBlend, XBool aFilter )
-{
-  XFloat top;
-  XFloat left;
-  XFloat right;
-  XFloat bottom;
-  XHandle dstBitmap;
-  XHandle srcBitmap;
-  XInt32 dstFrameNo;
-
-  if ( _this->Super1.bitmap == 0 )
-    ResourcesBitmap__Update( _this );
-
-  if ( _this->Super1.bitmap == 0 )
-    return;
-
-  if (((( aBitmap == 0 ) || ( aBitmap->bitmap == 0 )) || ( aFrameNr < 0 )) || ( 
-      aFrameNr >= aBitmap->NoOfFrames ))
-    return;
-
-  top = (XFloat)aDstRect.Point1.Y;
-  left = (XFloat)aDstRect.Point1.X;
-  right = (XFloat)aDstRect.Point2.X;
-  bottom = (XFloat)aDstRect.Point2.Y;
-
-  if ((((( right - left ) > 4096.0f ) || (( right - left ) < -4096.0f )) || (( bottom 
-      - top ) > 4096.0f )) || (( bottom - top ) < -4096.0f ))
-  {
-    EwTrace( "%s", EwLoadString( &_Const0006 ));
-    return;
-  }
-
-  dstBitmap = _this->Super1.bitmap;
-  srcBitmap = aBitmap->bitmap;
-  dstFrameNo = _this->DstFrameNr;
-  {
-    EwWarpBitmap((XBitmap*)dstBitmap, (XBitmap*)srcBitmap, dstFrameNo, aFrameNr, aClip,
-                  left,  top,    1.0f, right, top,    1.0f,
-                  right, bottom, 1.0f, left,  bottom, 1.0f,
-                  aSrcRect, aColorTL, aColorTR, aColorBR, aColorBL, aBlend, aFilter );
-  }
-}
-
-/* The method CopyBitmap() copies an area of a aBitmap into the canvas. The bitmap 
-   is specified in the parameter aBitmap. In case of a multi-frame bitmap the desired 
-   frame can be selected in the parameter aFrameNr.
-   The area to copy the bitmap is determined by the parameter aDstRect. The optional 
-   aSrcPos parameter determines a displacement of the bitmap within this aDstRect 
-   area. The parameters aColorTL, aColorTR, aColorBL, aColorBR determine the colors 
-   or opacities at the corresponding corners of the aDstRect area.
-   The parameter aClip limits the drawing operation. Pixel lying outside this area 
-   remain unchanged. The last aBlend parameter controls the mode how drawn pixel 
-   are combined with the pixel already existing in the destination bitmap. If aBlend 
-   is 'true', the drawn pixel are alpha-blended with the background, otherwise the 
-   drawn pixel will overwrite the old content. */
-void GraphicsCanvas_CopyBitmap( GraphicsCanvas _this, XRect aClip, ResourcesBitmap 
-  aBitmap, XInt32 aFrameNr, XRect aDstRect, XPoint aSrcPos, XColor aColorTL, XColor 
-  aColorTR, XColor aColorBR, XColor aColorBL, XBool aBlend )
-{
-  XHandle dstBitmap;
-  XHandle srcBitmap;
-  XInt32 dstFrameNr;
-
-  if ( _this->Super1.bitmap == 0 )
-    ResourcesBitmap__Update( _this );
-
-  if ( _this->Super1.bitmap == 0 )
-    return;
-
-  if (((( aBitmap == 0 ) || ( aBitmap->bitmap == 0 )) || ( aFrameNr < 0 )) || ( 
-      aFrameNr >= aBitmap->NoOfFrames ))
-    return;
-
-  dstBitmap = _this->Super1.bitmap;
-  srcBitmap = aBitmap->bitmap;
-  dstFrameNr = _this->DstFrameNr;
-  {
-    EwCopyBitmap((XBitmap*)dstBitmap, (XBitmap*)srcBitmap, dstFrameNr, aFrameNr,
-                  aClip, aDstRect, aSrcPos, aColorTL, aColorTR, aColorBR, aColorBL,
-                  aBlend );
-  }
-}
-
-/* The method DrawBorder() draws a hollow rectangle in an area of canvas. The area 
-   is determined by the parameter aDstRect. The parameter aEdgeWidth determine the 
-   width of the border's edge. The parameters aColorTL, aColorTR, aColorBL, aColorBR 
-   determine the colors at the corresponding corners of the aDstRect area.
-   The parameter aClip limits the drawing operation. Pixel lying outside this area 
-   remain unchanged. The last aBlend parameter controls the mode how drawn pixel 
-   are combined with the pixel already existing in the destination bitmap. If aBlend 
-   is 'true', the drawn pixel are alpha-blended with the background, otherwise the 
-   drawn pixel will overwrite the old content. */
-void GraphicsCanvas_DrawBorder( GraphicsCanvas _this, XRect aClip, XRect aDstRect, 
-  XInt32 aEdgeWidth, XColor aColorTL, XColor aColorTR, XColor aColorBR, XColor aColorBL, 
-  XBool aBlend )
-{
-  XHandle dstBitmap;
-  XInt32 dstFrameNo;
-
-  if ( _this->Super1.bitmap == 0 )
-    ResourcesBitmap__Update( _this );
-
-  if ( _this->Super1.bitmap == 0 )
-    return;
-
-  dstBitmap = _this->Super1.bitmap;
-  dstFrameNo = _this->DstFrameNr;
-  {
-    EwDrawBorder((XBitmap*)dstBitmap, dstFrameNo, aClip, aDstRect, aEdgeWidth, 
-                  aColorTL, aColorTR, aColorBR, aColorBL, aBlend );
-  }
-}
-
 /* The method FillRectangle() fills an area of canvas. The area is determined by 
    the parameter aDstRect. The parameters aColorTL, aColorTR, aColorBL, aColorBR 
    determine the colors at the corresponding corners of the aDstRect area.
@@ -659,124 +376,6 @@ void GraphicsCanvas_FillRectangle( GraphicsCanvas _this, XRect aClip, XRect aDst
   {
     EwFillRectangle((XBitmap*)dstBitmap, dstFrameNo, aClip, aDstRect, aColorTL, aColorTR,
                      aColorBR, aColorBL, aBlend );
-  }
-}
-
-/* 'C' function for method : 'Graphics::Canvas.DrawThickLine()' */
-void GraphicsCanvas_DrawThickLine( GraphicsCanvas _this, XRect aClip, XPoint aDstPos1, 
-  XPoint aDstPos2, XInt32 aWidth1, XInt32 aWidth2, XColor aColor1, XColor aColor2, 
-  XBool aBlend )
-{
-  XInt32 w1;
-  XInt32 w2;
-  XPoint p1;
-  XPoint p2;
-  XFloat fw1;
-  XFloat fw2;
-  XFloat fp1X;
-  XFloat fp1Y;
-  XFloat fp2X;
-  XFloat fp2Y;
-  XFloat dirX;
-  XFloat dirY;
-  XFloat len;
-  XFloat x1;
-  XFloat y1;
-  XFloat x2;
-  XFloat y2;
-  XFloat x3;
-  XFloat y3;
-  XFloat x4;
-  XFloat y4;
-  ResourcesBitmap opaqueBitmap;
-  XRect srcRect;
-  XHandle dstBitmap;
-  XInt32 dstFrameNo;
-  XHandle srcBitmap;
-
-  if ( _this->Super1.bitmap == 0 )
-    ResourcesBitmap__Update( _this );
-
-  if ( _this->Super1.bitmap == 0 )
-    return;
-
-  w1 = aWidth1;
-  w2 = aWidth2;
-  p1 = aDstPos1;
-  p2 = aDstPos2;
-
-  if ( !EwCompPoint( p1, p2 ))
-    return;
-
-  if ( w1 <= 1 )
-    w1 = 1;
-
-  if ( w2 <= 1 )
-    w2 = 1;
-
-  fw1 = (XFloat)w1 / 2.0f;
-  fw2 = (XFloat)w2 / 2.0f;
-  fp1X = (XFloat)p1.X;
-  fp1Y = (XFloat)p1.Y;
-  fp2X = (XFloat)p2.X;
-  fp2Y = (XFloat)p2.Y;
-  dirX = fp2X - fp1X;
-  dirY = fp2Y - fp1Y;
-  len = EwMathSqrt(( dirX * dirX ) + ( dirY * dirY ));
-
-  if ((( w1 > 4096 ) || ( w2 > 4096 )) || ( len > 4096.0f ))
-  {
-    EwTrace( "%s", EwLoadString( &_Const0007 ));
-    return;
-  }
-
-  dirX = dirX / len;
-  dirY = dirY / len;
-  x1 = fp1X + ( dirY * fw1 );
-  y1 = fp1Y - ( dirX * fw1 );
-  x2 = fp2X + ( dirY * fw2 );
-  y2 = fp2Y - ( dirX * fw2 );
-  x3 = fp2X - ( dirY * fw2 );
-  y3 = fp2Y + ( dirX * fw2 );
-  x4 = fp1X - ( dirY * fw1 );
-  y4 = fp1Y + ( dirX * fw1 );
-  opaqueBitmap = EwLoadResource( &ResourcesWhiteBitmapStripe, ResourcesBitmap );
-  srcRect = EwNewRect2Point( _Const0008, EwMovePointNeg( opaqueBitmap->FrameSize, 
-  _Const0009 ));
-  dstBitmap = _this->Super1.bitmap;
-  dstFrameNo = _this->DstFrameNr;
-  srcBitmap = opaqueBitmap->bitmap;
-  {
-    EwWarpBitmap((XBitmap*)dstBitmap, (XBitmap*)srcBitmap, dstFrameNo, 0, aClip,
-                  x1, y1, 1.0f, x2, y2, 1.0f, x3, y3, 1.0f, x4, y4, 1.0f, 
-                  srcRect, aColor1, aColor2, aColor2, aColor1, aBlend, 0 );
-  }
-}
-
-/* The method DrawLine() draws a line into the canvas. The line will be drawn from 
-   the aDstPos1 point to the aDstPos2 point with the given colors aColor1 and aColor2.
-   The parameter aClip limits the drawing operation. Pixel lying outside this area 
-   remain unchanged. The last aBlend parameter controls the mode how drawn pixel 
-   are combined with the pixel already existing in the destination bitmap. If aBlend 
-   is 'true', the drawn pixel are alpha-blended with the background, otherwise the 
-   drawn pixel will overwrite the old content. */
-void GraphicsCanvas_DrawLine( GraphicsCanvas _this, XRect aClip, XPoint aDstPos1, 
-  XPoint aDstPos2, XColor aColor1, XColor aColor2, XBool aBlend )
-{
-  XHandle dstBitmap;
-  XInt32 dstFrameNo;
-
-  if ( _this->Super1.bitmap == 0 )
-    ResourcesBitmap__Update( _this );
-
-  if ( _this->Super1.bitmap == 0 )
-    return;
-
-  dstBitmap = _this->Super1.bitmap;
-  dstFrameNo = _this->DstFrameNr;
-  {
-    EwDrawLine((XBitmap*)dstBitmap, dstFrameNo, aClip, aDstPos1, aDstPos2, aColor1,
-                aColor2, aBlend );
   }
 }
 

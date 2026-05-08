@@ -69,55 +69,6 @@
   #error Wrong version of Embedded Wizard Graphics Engine.
 #endif
 
-#include "_WidgetSetHorizontalSlider.h"
-#include "_WidgetSetHorizontalSliderConfig.h"
-#include "_WidgetSetPushButton.h"
-#include "_WidgetSetPushButtonConfig.h"
-#include "_WidgetSetToggleButton.h"
-#include "_WidgetSetToggleButtonConfig.h"
-#include "_WidgetSetVerticalValueBar.h"
-#include "_WidgetSetVerticalValueBarConfig.h"
-#include "_WidgetSetWidgetConfig.h"
-
-/* Bitmap resource used per default by the Widgets customized for the large size. */
-EW_DECLARE_BITMAP_RES( WidgetSetPushButtonLarge )
-
-/* Bitmap resource used per default by the Widgets customized for the large size. */
-EW_DECLARE_BITMAP_RES( WidgetSetVerticalValueBarLarge )
-
-/* Bitmap resource used per default by the Widgets customized for the medium size. */
-EW_DECLARE_BITMAP_RES( WidgetSetHorizontalSliderTrackMedium )
-
-/* Bitmap resource used per default by the Widgets customized for the medium size. */
-EW_DECLARE_BITMAP_RES( WidgetSetPushButtonMedium )
-
-/* Bitmap resource used per default by the Widgets customized for the medium size. */
-EW_DECLARE_BITMAP_RES( WidgetSetSwitchMedium )
-
-/* Bitmap resource used per default by the Widgets customized for the medium size. */
-EW_DECLARE_BITMAP_RES( WidgetSetThumbKnobMedium )
-
-/* This autoobject provides the default customization for the 'vertical value bar' 
-   widget (WidgetSet::VerticalValueBar) in its large size variant. */
-EW_DECLARE_AUTOOBJECT( WidgetSetVerticalValueBar_Lime_Large, WidgetSetVerticalValueBarConfig )
-
-/* This autoobject provides the default customization for the 'push button' widget 
-   (WidgetSet::PushButton) in its large size variant. */
-EW_DECLARE_AUTOOBJECT( WidgetSetPushButton_Lime_Large, WidgetSetPushButtonConfig )
-
-/* This autoobject provides the default customization for the 'horizontal slider' 
-   widget (WidgetSet::HorizontalSlider) in its medium size variant. */
-EW_DECLARE_AUTOOBJECT( WidgetSetHorizontalSlider_Lime_Medium, WidgetSetHorizontalSliderConfig )
-
-/* This autoobject provides one of the default customizations for the 'toggle' widget 
-   (WidgetSet::ToggleButton) in its medium size variant. With this customization 
-   the toggle button appears as a 'switch'. */
-EW_DECLARE_AUTOOBJECT( WidgetSetSwitch_Lime_Medium, WidgetSetToggleButtonConfig )
-
-/* This autoobject provides the default customization for the 'push button' widget 
-   (WidgetSet::PushButton) in its medium size variant. */
-EW_DECLARE_AUTOOBJECT( WidgetSetPushButton_Lime_Medium, WidgetSetPushButtonConfig )
-
 #ifdef __cplusplus
   }
 #endif

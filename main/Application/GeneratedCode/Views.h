@@ -69,29 +69,8 @@
   #error Wrong version of Embedded Wizard Graphics Engine.
 #endif
 
-#include "_ViewsBorder.h"
-#include "_ViewsFrame.h"
-#include "_ViewsImage.h"
-#include "_ViewsLine.h"
 #include "_ViewsRectangle.h"
-#include "_ViewsShadow.h"
 #include "_ViewsText.h"
-
-/* The definition Views::ImageAlignment determines the set of constraints to apply 
-   on a bitmap if its size differ from the size of the view where the bitmap is 
-   shown. Depending on the active constraints a bitmap can be aligned or stretched 
-   within the view's area. */
-typedef XSet ViewsImageAlignment;
-
-#define ViewsImageAlignmentAlignHorzLeft                    0x00000001
-#define ViewsImageAlignmentAlignHorzCenter                  0x00000002
-#define ViewsImageAlignmentAlignHorzRight                   0x00000004
-#define ViewsImageAlignmentAlignVertTop                     0x00000008
-#define ViewsImageAlignmentAlignVertCenter                  0x00000010
-#define ViewsImageAlignmentAlignVertBottom                  0x00000020
-#define ViewsImageAlignmentScaleToFill                      0x00000040
-#define ViewsImageAlignmentScaleToFit                       0x00000080
-#define ViewsImageAlignmentStretchToFill                    0x00000100
 
 /* The definition Views::TextAlignment determines the set of constraints to apply 
    on text rows and blocks if their size differ from the size of the view where 

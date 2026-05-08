@@ -84,12 +84,6 @@
 #define _CoreCursorGrabEvent_
 #endif
 
-/* Forward declaration of the class Core::DialogContext */
-#ifndef _CoreDialogContext_
-  EW_DECLARE_CLASS( CoreDialogContext )
-#define _CoreDialogContext_
-#endif
-
 /* Forward declaration of the class Core::DragEvent */
 #ifndef _CoreDragEvent_
   EW_DECLARE_CLASS( CoreDragEvent )
@@ -114,34 +108,16 @@
 #define _CoreLayoutContext_
 #endif
 
-/* Forward declaration of the class Core::ModalContext */
-#ifndef _CoreModalContext_
-  EW_DECLARE_CLASS( CoreModalContext )
-#define _CoreModalContext_
-#endif
-
 /* Forward declaration of the class Core::Root */
 #ifndef _CoreRoot_
   EW_DECLARE_CLASS( CoreRoot )
 #define _CoreRoot_
 #endif
 
-/* Forward declaration of the class Core::TaskQueue */
-#ifndef _CoreTaskQueue_
-  EW_DECLARE_CLASS( CoreTaskQueue )
-#define _CoreTaskQueue_
-#endif
-
 /* Forward declaration of the class Core::View */
 #ifndef _CoreView_
   EW_DECLARE_CLASS( CoreView )
 #define _CoreView_
-#endif
-
-/* Forward declaration of the class Effects::Fader */
-#ifndef _EffectsFader_
-  EW_DECLARE_CLASS( EffectsFader )
-#define _EffectsFader_
 #endif
 
 /* Forward declaration of the class Graphics::Canvas */
@@ -193,7 +169,6 @@
 EW_DEFINE_FIELDS( CoreRoot, CoreGroup )
   EW_OBJECT  ( cursorHoldTimer, CoreTimer )
   EW_VARIABLE( keyLastTarget,   XObject )
-  EW_VARIABLE( modalGroups,     CoreModalContext )
   EW_ARRAY   ( cursorTargetView, CoreView, [10])
   EW_VARIABLE( canvas,          GraphicsCanvas )
   EW_VARIABLE( keyLastCode,     XEnum )
@@ -222,8 +197,6 @@ EW_END_OF_FIELDS( CoreRoot )
 
 /* Virtual Method Table (VMT) for the class : 'Core::Root' */
 EW_DEFINE_METHODS( CoreRoot, CoreGroup )
-  EW_METHOD( initLayoutContext, void )( CoreRectView _this, XRect aBounds, CoreOutline 
-    aOutline )
   EW_METHOD( GetRoot,           CoreRoot )( CoreRoot _this )
   EW_METHOD( Draw,              void )( CoreRoot _this, GraphicsCanvas aCanvas, 
     XRect aClip, XPoint aOffset, XInt32 aOpacity, XBool aBlend )
@@ -241,40 +214,10 @@ EW_DEFINE_METHODS( CoreRoot, CoreGroup )
   EW_METHOD( ChangeViewState,   void )( CoreRoot _this, XSet aSetState, XSet aClearState )
   EW_METHOD( OnSetBounds,       void )( CoreGroup _this, XRect value )
   EW_METHOD( OnSetFocus,        void )( CoreRoot _this, CoreView value )
-  EW_METHOD( OnSetOpacity,      void )( CoreRoot _this, XInt32 value )
-  EW_METHOD( ExtendClipping,    void )( CoreGroup _this, XInt32 aExtClipLeft, XInt32 
-    aExtClipRight, XInt32 aExtClipTop, XInt32 aExtClipBottom )
-  EW_METHOD( SwitchToDialog,    void )( CoreGroup _this, CoreGroup aDialogGroup, 
-    EffectsTransition aPresentTransition, EffectsTransition aDismissTransition, 
-    EffectsTransition aOverlayTransition, EffectsTransition aRestoreTransition, 
-    EffectsTransition aOverrideDismissTransition, EffectsTransition aOverrideOverlayTransition, 
-    EffectsTransition aOverrideRestoreTransition, XSlot aComplete, XSlot aCancel, 
-    XBool aCombine )
-  EW_METHOD( DismissDialog,     void )( CoreGroup _this, CoreGroup aDialogGroup, 
-    EffectsTransition aOverrideDismissTransition, EffectsTransition aOverrideOverlayTransition, 
-    EffectsTransition aOverrideRestoreTransition, XSlot aComplete, XSlot aCancel, 
-    XBool aCombine )
-  EW_METHOD( PresentDialog,     void )( CoreGroup _this, CoreGroup aDialogGroup, 
-    EffectsTransition aPresentTransition, EffectsTransition aDismissTransition, 
-    EffectsTransition aOverlayTransition, EffectsTransition aRestoreTransition, 
-    EffectsTransition aOverrideOverlayTransition, EffectsTransition aOverrideRestoreTransition, 
-    XSlot aComplete, XSlot aCancel, XBool aCombine )
   EW_METHOD( DispatchEvent,     XObject )( CoreRoot _this, CoreEvent aEvent )
   EW_METHOD( BroadcastEvent,    XObject )( CoreRoot _this, CoreEvent aEvent, XSet 
     aFilter )
-  EW_METHOD( UpdateViewState,   void )( CoreGroup _this, XSet aState )
   EW_METHOD( InvalidateArea,    void )( CoreRoot _this, XRect aArea )
-  EW_METHOD( FindSiblingView,   CoreView )( CoreGroup _this, CoreView aView, XSet 
-    aFilter )
-  EW_METHOD( FadeGroup,         void )( CoreGroup _this, CoreGroup aGroup, EffectsFader 
-    aFader, XSlot aComplete, XSlot aCancel, XBool aCombine )
-  EW_METHOD( RestackBack,       void )( CoreGroup _this, CoreView aView )
-  EW_METHOD( RestackTop,        void )( CoreGroup _this, CoreView aView )
-  EW_METHOD( Restack,           void )( CoreGroup _this, CoreView aView, XInt32 
-    aOrder )
-  EW_METHOD( Remove,            void )( CoreGroup _this, CoreView aView )
-  EW_METHOD( Add,               void )( CoreGroup _this, CoreView aView, XInt32 
-    aOrder )
 EW_END_OF_METHODS( CoreRoot )
 
 /* The method Init() is invoked automatically after the component has been created. 
@@ -309,9 +252,6 @@ void CoreRoot_ChangeViewState( CoreRoot _this, XSet aSetState, XSet aClearState 
 
 /* 'C' function for method : 'Core::Root.OnSetFocus()' */
 void CoreRoot_OnSetFocus( CoreRoot _this, CoreView value );
-
-/* 'C' function for method : 'Core::Root.OnSetOpacity()' */
-void CoreRoot_OnSetOpacity( CoreRoot _this, XInt32 value );
 
 /* The method DispatchEvent() feeds the component with the event passed in the parameter 
    aEvent and propagates it along the so-called focus path. This focus path leads 
@@ -645,44 +585,6 @@ XBool CoreRoot__DriveMultiTouchHitting( void* _this, XBool aDown, XInt32 aFinger
 CoreView CoreRoot_RetargetCursorWithReason( CoreRoot _this, CoreView aNewTarget, 
   CoreView aFallbackTarget, CoreView aStartView, XSet aRetargetReason );
 
-/* The method RetargetCursor() changes the currently active cursor event target 
-   view. Usually, the target view is determined when the user presses the finger 
-   on the touch screen. Once determined, the target view remains active until the 
-   user has released the finger. In the meantime the framework will provide this 
-   target view with all cursor events. This entire cycle is called 'grab cycle'. 
-   The method RetargetCursor() allows you to select a new target view without the 
-   necessity to wait until the user has released the touch screen and thus has finalized 
-   the grab cycle.
-   At first the method asks the new potential target view aNewTarget whether it 
-   or one of its sub-views is willing to handle the cursor events. If successful, 
-   the method hands over the cursor event flow to this determined view. If there 
-   is no view willing to handle these events, the method hands over the event flow 
-   directly to the view specified in the parameter aFallbackTarget. If no willing 
-   view could be found and no fall-back view was given, the current grab cycle is 
-   finalized as if the user had released the touch screen.
-   Unlike the method @DeflectCursor() this RetargetCursor() method performs the 
-   cursor hit test for all views of the new potential target. This is as if the 
-   user had tapped the screen and the framework tries to determine the view affected 
-   by this interaction. This search operation is limited to views at the current 
-   cursor position.
-   The parameter aStartView, if it is not 'null', restricts the operation to be 
-   handled by the specified view or another view lying behind it. In other words, 
-   views found in front of aStartView are not taken in account during the hit-test 
-   operation.
-   When switching the target view, the framework provides the old and the new target 
-   views with cursor events. The old view will receive a Core::CursorEvent with 
-   variables Down == 'false' and AutoDeflected == 'true' - this simulates the release 
-   operations. The new target view will receive a Core::CursorEvent with the variable 
-   Down == 'true' as if it had been just touched by the user.
-   If the application is running within a multi-touch environment, the invocation 
-   of the RetargetCursor() method does affect the event flow corresponding only 
-   to the finger which has lastly generated touch events.
-   The return value of the method identifies the view which becomed the new target 
-   of the events.
-   Please note the alternative version of this method @RetargetCursorWithReason(). */
-CoreView CoreRoot_RetargetCursor( CoreRoot _this, CoreView aNewTarget, CoreView 
-  aFallbackTarget, CoreView aStartView );
-
 /* The method DeflectCursor() changes the currently active cursor event target view. 
    Usually, the target view is determined when the user presses the finger on the 
    touch screen. Once determined, the target view remains active until the user 
@@ -711,27 +613,6 @@ void CoreRoot_DeflectCursor( CoreRoot _this, CoreView aNewTarget, XPoint aHitOff
    input events. If there is no active modal component, the method returns 'null'. 
    To make a GUI component modal, the method @BeginModal() should be used. */
 CoreGroup CoreRoot_GetModalGroup( CoreRoot _this );
-
-/* The method EndModal() terminates the modal state of the given GUI component aGroup. 
-   Usually, this forces the framework to restore the origin user input event flow 
-   unless there are other components on the modal stack. In this case the event 
-   flow is redirected to the next component on this stack.
-   Whether a GUI component is currently modal or not is reflected in its state Core::ViewState.Modal. 
-   This state can be evaluated in the implementation of the @UpdateViewState() method. 
-   For example, the method may highlight the component if it has obtained the modal 
-   state, etc. */
-void CoreRoot_EndModal( CoreRoot _this, CoreGroup aGroup );
-
-/* The method BeginModal() initiates the modal state of the given GUI component 
-   aGroup. Usually, this forces the framework to limit all user inputs to this component 
-   and its sub-views. If there is already another modal GUI component active, this 
-   method puts this component on the modal stack and redirects its user inputs events 
-   to the new component.
-   Whether a GUI component is currently modal or not is reflected in its state Core::ViewState.Modal. 
-   This state can be evaluated in the implementation of the @UpdateViewState() method. 
-   For example, the method may highlight the component if it has obtained the modal 
-   state, etc. */
-void CoreRoot_BeginModal( CoreRoot _this, CoreGroup aGroup );
 
 #ifdef __cplusplus
   }

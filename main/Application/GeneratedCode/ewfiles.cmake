@@ -7,5 +7,4 @@ set(EMWIFILES
 	"Resources.c" 
 	"Views.c" 
 	"WidgetSet.c" 
-	"Application.c" 
-	"Templates.c")
+	"Application.c")

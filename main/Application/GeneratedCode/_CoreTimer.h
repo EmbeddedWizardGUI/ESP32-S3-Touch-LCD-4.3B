@@ -92,13 +92,11 @@ EW_DEFINE_FIELDS( CoreTimer, XObject )
   EW_VARIABLE( timer,           XHandle )
   EW_VARIABLE( Time,            XUInt32 )
   EW_PROPERTY( Period,          XInt32 )
-  EW_PROPERTY( Begin,           XInt32 )
   EW_PROPERTY( Enabled,         XBool )
 EW_END_OF_FIELDS( CoreTimer )
 
 /* Virtual Method Table (VMT) for the class : 'Core::Timer' */
 EW_DEFINE_METHODS( CoreTimer, XObject )
-  EW_METHOD( Trigger,           void )( CoreTimer _this )
 EW_END_OF_METHODS( CoreTimer )
 
 /* 'C' function for method : 'Core::Timer.Done()' */
@@ -109,9 +107,6 @@ void CoreTimer_restart( CoreTimer _this, XInt32 aBegin, XInt32 aPeriod );
 
 /* 'C' function for method : 'Core::Timer.OnSetPeriod()' */
 void CoreTimer_OnSetPeriod( CoreTimer _this, XInt32 value );
-
-/* 'C' function for method : 'Core::Timer.OnSetBegin()' */
-void CoreTimer_OnSetBegin( CoreTimer _this, XInt32 value );
 
 /* 'C' function for method : 'Core::Timer.OnSetEnabled()' */
 void CoreTimer_OnSetEnabled( CoreTimer _this, XBool value );
@@ -127,7 +122,7 @@ XUInt32 CoreTimer_GetCurrentTime( CoreTimer _this );
    to the slot method stored in the @OnTrigger property. */
 void CoreTimer_Trigger( CoreTimer _this );
 
-/* Wrapper function for the virtual method : 'Core::Timer.Trigger()' */
+/* Wrapper function for the non virtual method : 'Core::Timer.Trigger()' */
 void CoreTimer__Trigger( void* _this );
 
 /* The following define announces the presence of the method Core::Timer.Trigger(). */

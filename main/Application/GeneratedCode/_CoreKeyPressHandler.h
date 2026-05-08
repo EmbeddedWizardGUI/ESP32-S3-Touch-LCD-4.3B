@@ -103,18 +103,13 @@
    Disabled handler will not react to the events. */
 EW_DEFINE_FIELDS( CoreKeyPressHandler, XObject )
   EW_VARIABLE( next,            CoreKeyPressHandler )
-  EW_PROPERTY( OnRelease,       XSlot )
-  EW_PROPERTY( OnPress,         XSlot )
-  EW_PROPERTY( OnHold,          XSlot )
   EW_VARIABLE( pressCounter,    XInt32 )
   EW_VARIABLE( Time,            XUInt32 )
   EW_VARIABLE( Code,            XEnum )
   EW_VARIABLE( RepetitionCount, XInt32 )
-  EW_PROPERTY( Filter,          XEnum )
   EW_VARIABLE( CharCode,        XChar )
   EW_VARIABLE( Repetition,      XBool )
   EW_VARIABLE( Down,            XBool )
-  EW_PROPERTY( Enabled,         XBool )
 EW_END_OF_FIELDS( CoreKeyPressHandler )
 
 /* Virtual Method Table (VMT) for the class : 'Core::KeyPressHandler' */

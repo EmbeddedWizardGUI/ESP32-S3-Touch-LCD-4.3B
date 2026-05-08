@@ -119,22 +119,11 @@
    within the GUI component itself. Very useful for any kind of scrollable lists, 
    menus, etc. */
 EW_DEFINE_FIELDS( ViewsRectangle, CoreRectView )
-  EW_PROPERTY( RadiusBL,        XInt32 )
-  EW_PROPERTY( RadiusBR,        XInt32 )
-  EW_PROPERTY( RadiusTR,        XInt32 )
-  EW_PROPERTY( RadiusTL,        XInt32 )
-  EW_PROPERTY( ColorBL,         XColor )
-  EW_PROPERTY( ColorBR,         XColor )
-  EW_PROPERTY( ColorTR,         XColor )
-  EW_PROPERTY( ColorTL,         XColor )
-  EW_PROPERTY( Radius,          XInt32 )
   EW_PROPERTY( Color,           XColor )
 EW_END_OF_FIELDS( ViewsRectangle )
 
 /* Virtual Method Table (VMT) for the class : 'Views::Rectangle' */
 EW_DEFINE_METHODS( ViewsRectangle, CoreRectView )
-  EW_METHOD( initLayoutContext, void )( CoreRectView _this, XRect aBounds, CoreOutline 
-    aOutline )
   EW_METHOD( GetRoot,           CoreRoot )( CoreView _this )
   EW_METHOD( Draw,              void )( ViewsRectangle _this, GraphicsCanvas aCanvas, 
     XRect aClip, XPoint aOffset, XInt32 aOpacity, XBool aBlend )
@@ -181,38 +170,8 @@ EW_END_OF_METHODS( ViewsRectangle )
 void ViewsRectangle_Draw( ViewsRectangle _this, GraphicsCanvas aCanvas, XRect aClip, 
   XPoint aOffset, XInt32 aOpacity, XBool aBlend );
 
-/* 'C' function for method : 'Views::Rectangle.OnSetRadiusBL()' */
-void ViewsRectangle_OnSetRadiusBL( ViewsRectangle _this, XInt32 value );
-
-/* 'C' function for method : 'Views::Rectangle.OnSetRadiusBR()' */
-void ViewsRectangle_OnSetRadiusBR( ViewsRectangle _this, XInt32 value );
-
-/* 'C' function for method : 'Views::Rectangle.OnSetRadiusTR()' */
-void ViewsRectangle_OnSetRadiusTR( ViewsRectangle _this, XInt32 value );
-
-/* 'C' function for method : 'Views::Rectangle.OnSetRadiusTL()' */
-void ViewsRectangle_OnSetRadiusTL( ViewsRectangle _this, XInt32 value );
-
-/* 'C' function for method : 'Views::Rectangle.OnSetColorBL()' */
-void ViewsRectangle_OnSetColorBL( ViewsRectangle _this, XColor value );
-
-/* 'C' function for method : 'Views::Rectangle.OnSetColorBR()' */
-void ViewsRectangle_OnSetColorBR( ViewsRectangle _this, XColor value );
-
-/* 'C' function for method : 'Views::Rectangle.OnSetColorTR()' */
-void ViewsRectangle_OnSetColorTR( ViewsRectangle _this, XColor value );
-
-/* 'C' function for method : 'Views::Rectangle.OnSetColorTL()' */
-void ViewsRectangle_OnSetColorTL( ViewsRectangle _this, XColor value );
-
-/* 'C' function for method : 'Views::Rectangle.OnSetRadius()' */
-void ViewsRectangle_OnSetRadius( ViewsRectangle _this, XInt32 value );
-
 /* 'C' function for method : 'Views::Rectangle.OnSetColor()' */
 void ViewsRectangle_OnSetColor( ViewsRectangle _this, XColor value );
-
-/* 'C' function for method : 'Views::Rectangle.OnSetVisible()' */
-void ViewsRectangle_OnSetVisible( ViewsRectangle _this, XBool value );
 
 #ifdef __cplusplus
   }

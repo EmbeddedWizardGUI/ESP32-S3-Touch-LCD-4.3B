@@ -446,18 +446,6 @@ EW_DEFINE_CLASS( ResourcesFont, CoreResource, _.VMT, _.VMT, _.VMT, _.VMT, _.VMT,
                  _.VMT, "Resources::Font" )
 EW_END_OF_CLASS( ResourcesFont )
 
-/* Include a file containing the font resource : 'Resources::FontMedium' */
-#include "_ResourcesFontMedium.h"
-
-/* Table with links to derived variants of the font resource : 'Resources::FontMedium' */
-EW_RES_WITHOUT_VARIANTS( ResourcesFontMedium )
-
-/* Include a file containing the font resource : 'Resources::FontLarge' */
-#include "_ResourcesFontLarge.h"
-
-/* Table with links to derived variants of the font resource : 'Resources::FontLarge' */
-EW_RES_WITHOUT_VARIANTS( ResourcesFontLarge )
-
 /* Initializer for the class 'Resources::FontSet' */
 void ResourcesFontSet__Init( ResourcesFontSet _this, XObject aLink, XHandle aArg )
 {
@@ -579,11 +567,5 @@ EW_END_OF_CLASS_VARIANTS( ResourcesFontSet )
 EW_DEFINE_CLASS( ResourcesFontSet, ResourcesFont, fonts, fonts, _.VMT, _.VMT, _.VMT, 
                  _.VMT, "Resources::FontSet" )
 EW_END_OF_CLASS( ResourcesFontSet )
-
-/* Include a file containing the bitmap resource : 'Resources::WhiteBitmapStripe' */
-#include "_ResourcesWhiteBitmapStripe.h"
-
-/* Table with links to derived variants of the bitmap resource : 'Resources::WhiteBitmapStripe' */
-EW_RES_WITHOUT_VARIANTS( ResourcesWhiteBitmapStripe )
 
 /* Embedded Wizard */

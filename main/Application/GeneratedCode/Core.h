@@ -72,30 +72,20 @@
 #include "_CoreCursorEvent.h"
 #include "_CoreCursorGrabEvent.h"
 #include "_CoreCursorHit.h"
-#include "_CoreDialogContext.h"
 #include "_CoreDragEvent.h"
 #include "_CoreEvent.h"
 #include "_CoreGroup.h"
 #include "_CoreKeyEvent.h"
 #include "_CoreKeyPressHandler.h"
 #include "_CoreLayoutContext.h"
-#include "_CoreLayoutLineContext.h"
 #include "_CoreLayoutQuadContext.h"
-#include "_CoreLineView.h"
-#include "_CoreModalContext.h"
 #include "_CoreOutline.h"
-#include "_CorePropertyObserver.h"
 #include "_CoreQuadView.h"
 #include "_CoreRectView.h"
 #include "_CoreResource.h"
 #include "_CoreRoot.h"
 #include "_CoreSimpleTouchHandler.h"
-#include "_CoreSlideTouchHandler.h"
-#include "_CoreTask.h"
-#include "_CoreTaskQueue.h"
-#include "_CoreTime.h"
 #include "_CoreTimer.h"
-#include "_CoreVerticalList.h"
 #include "_CoreView.h"
 
 /* Global constant containing the preferred size of the screen in pixel. */
@@ -136,29 +126,6 @@ typedef XSet CoreViewState;
 #define CoreViewStatePreEnabled                             0x00100000
 #define CoreViewStateDeriveEnabledState                     0x00200000
 
-/* The definition Core::Layout determines the set of available arrangement constraints 
-   to apply on views during the automatic GUI arrangement. Each view can determine 
-   its own set of constraints how it want to behave when e.g. its owner changes 
-   the size.
-   The constraints @ResizeVert and @ResizeHorz e.g. determine the resize behavior 
-   of the view in response to the size modification of its owner. Views with these 
-   constraints disabled always will keep their size unchanged. In conflict cases 
-   when the alignment and resize constraints do contradict, the view will maintain 
-   its size and will be pulled into the middle area resulting by the alignment constraints.
-   In case of views automatically arranged in rows or columns within a Core::Outline, 
-   the alignment constraints determine the vertical or horizontal alignment of the 
-   view within the corresponding row or column. The resize constraints in this case 
-   enable the view to fill the entire height of a column or the entire width of 
-   a row. */
-typedef XSet CoreLayout;
-
-#define CoreLayoutResizeHorz                                0x00000001
-#define CoreLayoutResizeVert                                0x00000002
-#define CoreLayoutAlignToLeft                               0x00000004
-#define CoreLayoutAlignToRight                              0x00000008
-#define CoreLayoutAlignToTop                                0x00000010
-#define CoreLayoutAlignToBottom                             0x00000020
-
 /* The definition Core::Formation determines the available arrangement modes to 
    apply on all views embedded within a Core::Outline view. Depending on the mode, 
    the embedded views can be arranged in rows or columns. If the mode == Core::Formation.None, 
@@ -179,20 +146,6 @@ typedef XEnum CoreFormation;
 #define CoreFormationLeftToRight_BottomToTop                10
 #define CoreFormationRightToLeft_TopToBottom                11
 #define CoreFormationRightToLeft_BottomToTop                12
-
-/* The definition Core::Direction determines available directions the user can navigate 
-   in the GUI. */
-typedef XEnum CoreDirection;
-
-#define CoreDirectionNone                                   0
-#define CoreDirectionTopLeft                                1
-#define CoreDirectionLeft                                   2
-#define CoreDirectionBottomLeft                             3
-#define CoreDirectionTop                                    4
-#define CoreDirectionBottom                                 5
-#define CoreDirectionTopRight                               6
-#define CoreDirectionRight                                  7
-#define CoreDirectionBottomRight                            8
 
 /* The enumeration Core::KeyCode provides a set of predefined keyboard codes very 
    common to mobile and remote control devices, e.g. Menu, Left, Up, Ok, Exit, Play, 

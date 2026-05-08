@@ -73,17 +73,6 @@
 #include "_ResourcesFont.h"
 #include "_ResourcesFontSet.h"
 
-/* The medium version of the default font resource. The resource is using 'Roboto' 
-   TrueType font with 24 pixel height. */
-EW_DECLARE_FONT_RES( ResourcesFontMedium )
-
-/* The large version of the default font resource. The resource is using 'Roboto' 
-   TrueType font with 36 pixel height. */
-EW_DECLARE_FONT_RES( ResourcesFontLarge )
-
-/* Bitmap resource : 'Resources::WhiteBitmapStripe' */
-EW_DECLARE_BITMAP_RES( ResourcesWhiteBitmapStripe )
-
 #ifdef __cplusplus
   }
 #endif

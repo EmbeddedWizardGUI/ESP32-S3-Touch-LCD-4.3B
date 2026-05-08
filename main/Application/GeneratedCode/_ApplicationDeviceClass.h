@@ -71,37 +71,27 @@
 
 #include "_CoreTimer.h"
 
-/* Forward declaration of the class Application::DateTimePicker */
-#ifndef _ApplicationDateTimePicker_
-  EW_DECLARE_CLASS( ApplicationDateTimePicker )
-#define _ApplicationDateTimePicker_
-#endif
-
 /* Forward declaration of the class Application::DeviceClass */
 #ifndef _ApplicationDeviceClass_
   EW_DECLARE_CLASS( ApplicationDeviceClass )
 #define _ApplicationDeviceClass_
 #endif
 
-/* Forward declaration of the class Application::SettingsClass */
-#ifndef _ApplicationSettingsClass_
-  EW_DECLARE_CLASS( ApplicationSettingsClass )
-#define _ApplicationSettingsClass_
-#endif
 
-
-/* This class implements the interface between the GUI application and the device. */
+/* -----------------------------------------------------------------------------
+   DeviceClass - the contract between the GUI and DeviceDriver.c.
+   ----------------------------------------------------------------------------- */
 EW_DEFINE_FIELDS( ApplicationDeviceClass, XObject )
   EW_OBJECT  ( Pump,            CoreTimer )
-  EW_VARIABLE( SettingsLocked,  ApplicationSettingsClass )
-  EW_VARIABLE( SettingsModified, ApplicationSettingsClass )
-  EW_PROPERTY( RtcTime,         ApplicationDateTimePicker )
-  EW_PROPERTY( Battery,         XInt32 )
-  EW_PROPERTY( StartButtonState, XBool )
-  EW_PROPERTY( StopButtonState, XBool )
-  EW_PROPERTY( CityPowerState,  XBool )
-  EW_PROPERTY( GeneratorBackupState, XBool )
-  EW_PROPERTY( BacklightState,  XBool )
+  EW_ARRAY   ( ResultSsid,      XString, [20])
+  EW_ARRAY   ( ResultBssid,     XString, [20])
+  EW_PROPERTY( ResultCount,     XInt32 )
+  EW_PROPERTY( LastScanTimestamp, XInt32 )
+  EW_ARRAY   ( ResultRssi,      XInt32, [20])
+  EW_ARRAY   ( ResultChannel,   XInt32, [20])
+  EW_ARRAY   ( ResultAuthmode,  XInt32, [20])
+  EW_PROPERTY( IsReady,         XBool )
+  EW_PROPERTY( IsScanning,      XBool )
 EW_END_OF_FIELDS( ApplicationDeviceClass )
 
 /* Virtual Method Table (VMT) for the class : 'Application::DeviceClass' */
@@ -111,112 +101,73 @@ EW_END_OF_METHODS( ApplicationDeviceClass )
 /* 'C' function for method : 'Application::DeviceClass.Done()' */
 void ApplicationDeviceClass_Done( ApplicationDeviceClass _this );
 
-/* 'C' function for method : 'Application::DeviceClass.Init()' */
+/* ----- lifecycle: bring up the Wi-Fi BSP and the polling timer ----------- */
 void ApplicationDeviceClass_Init( ApplicationDeviceClass _this, XHandle aArg );
 
-/* 'C' function for method : 'Application::DeviceClass.OnSetStartButtonState()' */
-void ApplicationDeviceClass_OnSetStartButtonState( ApplicationDeviceClass _this, 
-  XBool value );
+/* ----- C -> GUI: push status flags ---------------------------------------- */
+void ApplicationDeviceClass_UpdateStatus( ApplicationDeviceClass _this, XBool aIsReady, 
+  XBool aIsScanning );
 
-/* 'C' function for method : 'Application::DeviceClass.OnSetStopButtonState()' */
-void ApplicationDeviceClass_OnSetStopButtonState( ApplicationDeviceClass _this, 
-  XBool value );
+/* Wrapper function for the non virtual method : 'Application::DeviceClass.UpdateStatus()' */
+void ApplicationDeviceClass__UpdateStatus( void* _this, XBool aIsReady, XBool aIsScanning );
 
-/* This method is intended to be called by the device driver to notify the GUI application 
-   about an alternation of its setting or state value. */
-void ApplicationDeviceClass_UpdateCityPowerState( ApplicationDeviceClass _this, 
-  XBool aNewValue );
+/* The following define announces the presence of the method Application::DeviceClass.UpdateStatus(). */
+#define _ApplicationDeviceClass__UpdateStatus_
 
-/* Wrapper function for the non virtual method : 'Application::DeviceClass.UpdateCityPowerState()' */
-void ApplicationDeviceClass__UpdateCityPowerState( void* _this, XBool aNewValue );
+/* ----- C -> GUI: finalize a scan (count + timestamp, notify observers) ---- */
+void ApplicationDeviceClass_FinalizeScanResults( ApplicationDeviceClass _this, XInt32 
+  aCount, XInt32 aTimestamp );
 
-/* The following define announces the presence of the method Application::DeviceClass.UpdateCityPowerState(). */
-#define _ApplicationDeviceClass__UpdateCityPowerState_
+/* Wrapper function for the non virtual method : 'Application::DeviceClass.FinalizeScanResults()' */
+void ApplicationDeviceClass__FinalizeScanResults( void* _this, XInt32 aCount, XInt32 
+  aTimestamp );
 
-/* This method is intended to be called by the device driver to notify the GUI application 
-   about an alternation of its setting or state value. */
-void ApplicationDeviceClass_UpdateGeneratorBackupState( ApplicationDeviceClass _this, 
-  XBool aNewValue );
+/* The following define announces the presence of the method Application::DeviceClass.FinalizeScanResults(). */
+#define _ApplicationDeviceClass__FinalizeScanResults_
 
-/* Wrapper function for the non virtual method : 'Application::DeviceClass.UpdateGeneratorBackupState()' */
-void ApplicationDeviceClass__UpdateGeneratorBackupState( void* _this, XBool aNewValue );
+/* ----- C -> GUI: push one AP record into the arrays ----------------------- */
+void ApplicationDeviceClass_UpdateScanResult( ApplicationDeviceClass _this, XInt32 
+  aIndex, XString aSsid, XString aBssid, XInt32 aRssi, XInt32 aChannel, XInt32 aAuthmode );
 
-/* The following define announces the presence of the method Application::DeviceClass.UpdateGeneratorBackupState(). */
-#define _ApplicationDeviceClass__UpdateGeneratorBackupState_
+/* Wrapper function for the non virtual method : 'Application::DeviceClass.UpdateScanResult()' */
+void ApplicationDeviceClass__UpdateScanResult( void* _this, XInt32 aIndex, XString 
+  aSsid, XString aBssid, XInt32 aRssi, XInt32 aChannel, XInt32 aAuthmode );
 
-/* 'C' function for method : 'Application::DeviceClass.OnSetBacklightState()' */
-void ApplicationDeviceClass_OnSetBacklightState( ApplicationDeviceClass _this, XBool 
-  value );
+/* The following define announces the presence of the method Application::DeviceClass.UpdateScanResult(). */
+#define _ApplicationDeviceClass__UpdateScanResult_
 
-/* This method is intended to be called by the device driver to notify the GUI application 
-   about an alternation of its setting or state value. */
-void ApplicationDeviceClass_ReadSettingsFromSd( ApplicationDeviceClass _this );
-
-/* Wrapper function for the non virtual method : 'Application::DeviceClass.ReadSettingsFromSd()' */
-void ApplicationDeviceClass__ReadSettingsFromSd( void* _this );
-
-/* The following define announces the presence of the method Application::DeviceClass.ReadSettingsFromSd(). */
-#define _ApplicationDeviceClass__ReadSettingsFromSd_
-
-/* This method is intended to be called by the device driver to notify the GUI application 
-   about an alternation of its setting or state value. */
-void ApplicationDeviceClass_WriteSettingsToSd( ApplicationDeviceClass _this );
-
-/* Wrapper function for the non virtual method : 'Application::DeviceClass.WriteSettingsToSd()' */
-void ApplicationDeviceClass__WriteSettingsToSd( void* _this );
-
-/* The following define announces the presence of the method Application::DeviceClass.WriteSettingsToSd(). */
-#define _ApplicationDeviceClass__WriteSettingsToSd_
-
-/* This method is intended to be called by the device driver to notify the GUI application 
-   about an alternation of its setting or state value. */
-void ApplicationDeviceClass_UpdateBattery( ApplicationDeviceClass _this, XInt32 
-  aNewValue );
-
-/* Wrapper function for the non virtual method : 'Application::DeviceClass.UpdateBattery()' */
-void ApplicationDeviceClass__UpdateBattery( void* _this, XInt32 aNewValue );
-
-/* The following define announces the presence of the method Application::DeviceClass.UpdateBattery(). */
-#define _ApplicationDeviceClass__UpdateBattery_
-
-/* 'C' function for method : 'Application::DeviceClass.OnSetRtcTime()' */
-void ApplicationDeviceClass_OnSetRtcTime( ApplicationDeviceClass _this, ApplicationDateTimePicker 
-  value );
+/* ----- GUI -> C: request a manual scan ------------------------------------ */
+void ApplicationDeviceClass_RequestScan( ApplicationDeviceClass _this, XObject sender );
 
 /* 'C' function for method : 'Application::DeviceClass.OnPump()' */
 void ApplicationDeviceClass_OnPump( ApplicationDeviceClass _this, XObject sender );
 
-/* Default onget method for the property 'StartButtonState' */
-XBool ApplicationDeviceClass_OnGetStartButtonState( ApplicationDeviceClass _this );
+/* Default onget method for the property 'IsReady' */
+XBool ApplicationDeviceClass_OnGetIsReady( ApplicationDeviceClass _this );
 
-/* Default onget method for the property 'StopButtonState' */
-XBool ApplicationDeviceClass_OnGetStopButtonState( ApplicationDeviceClass _this );
+/* Default onset method for the property 'IsReady' */
+void ApplicationDeviceClass_OnSetIsReady( ApplicationDeviceClass _this, XBool value );
 
-/* Default onget method for the property 'CityPowerState' */
-XBool ApplicationDeviceClass_OnGetCityPowerState( ApplicationDeviceClass _this );
+/* Default onget method for the property 'IsScanning' */
+XBool ApplicationDeviceClass_OnGetIsScanning( ApplicationDeviceClass _this );
 
-/* Default onset method for the property 'CityPowerState' */
-void ApplicationDeviceClass_OnSetCityPowerState( ApplicationDeviceClass _this, XBool 
+/* Default onset method for the property 'IsScanning' */
+void ApplicationDeviceClass_OnSetIsScanning( ApplicationDeviceClass _this, XBool 
   value );
 
-/* Default onget method for the property 'GeneratorBackupState' */
-XBool ApplicationDeviceClass_OnGetGeneratorBackupState( ApplicationDeviceClass _this );
+/* Default onget method for the property 'ResultCount' */
+XInt32 ApplicationDeviceClass_OnGetResultCount( ApplicationDeviceClass _this );
 
-/* Default onset method for the property 'GeneratorBackupState' */
-void ApplicationDeviceClass_OnSetGeneratorBackupState( ApplicationDeviceClass _this, 
-  XBool value );
+/* Default onset method for the property 'ResultCount' */
+void ApplicationDeviceClass_OnSetResultCount( ApplicationDeviceClass _this, XInt32 
+  value );
 
-/* Default onget method for the property 'BacklightState' */
-XBool ApplicationDeviceClass_OnGetBacklightState( ApplicationDeviceClass _this );
+/* Default onget method for the property 'LastScanTimestamp' */
+XInt32 ApplicationDeviceClass_OnGetLastScanTimestamp( ApplicationDeviceClass _this );
 
-/* Default onget method for the property 'Battery' */
-XInt32 ApplicationDeviceClass_OnGetBattery( ApplicationDeviceClass _this );
-
-/* Default onset method for the property 'Battery' */
-void ApplicationDeviceClass_OnSetBattery( ApplicationDeviceClass _this, XInt32 value );
-
-/* Default onget method for the property 'RtcTime' */
-ApplicationDateTimePicker ApplicationDeviceClass_OnGetRtcTime( ApplicationDeviceClass _this );
+/* Default onset method for the property 'LastScanTimestamp' */
+void ApplicationDeviceClass_OnSetLastScanTimestamp( ApplicationDeviceClass _this, 
+  XInt32 value );
 
 #ifdef __cplusplus
   }

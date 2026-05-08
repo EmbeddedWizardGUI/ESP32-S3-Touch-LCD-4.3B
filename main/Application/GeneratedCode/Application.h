@@ -70,120 +70,24 @@
 #endif
 
 #include "_ApplicationApplication.h"
-#include "_ApplicationBottomNote.h"
-#include "_ApplicationDateTimePicker.h"
 #include "_ApplicationDeviceClass.h"
-#include "_ApplicationEventsDialogue.h"
-#include "_ApplicationHourMinutePicker.h"
-#include "_ApplicationSettingsClass.h"
-#include "_ApplicationSettingsDialogue.h"
-#include "_ApplicationSettingsPage1.h"
-#include "_ApplicationSettingsPage2.h"
-#include "_ApplicationSettingsPage3.h"
-#include "_ApplicationSettingsValueDisplay.h"
 
-/* Bitmap resource : 'Application::Battery' */
-EW_DECLARE_BITMAP_RES( ApplicationBattery )
+/* -----------------------------------------------------------------------------
+   Resources
+   ----------------------------------------------------------------------------- */
+EW_DECLARE_FONT_RES( ApplicationFontTitle )
 
-/* Bitmap resource : 'Application::Notification' */
-EW_DECLARE_BITMAP_RES( ApplicationNotification )
+/* Font resource : 'Application::FontBody' */
+EW_DECLARE_FONT_RES( ApplicationFontBody )
 
-/* Bitmap resource : 'Application::Bolt' */
-EW_DECLARE_BITMAP_RES( ApplicationBolt )
+/* Font resource : 'Application::FontButton' */
+EW_DECLARE_FONT_RES( ApplicationFontButton )
 
-/* Bitmap resource : 'Application::Generator' */
-EW_DECLARE_BITMAP_RES( ApplicationGenerator )
+/* Monospaced font for the result list - lines up the columns nicely. */
+EW_DECLARE_FONT_RES( ApplicationFontList )
 
-/* Bitmap resource : 'Application::PowerGrid' */
-EW_DECLARE_BITMAP_RES( ApplicationPowerGrid )
-
-/* Bitmap resource : 'Application::House' */
-EW_DECLARE_BITMAP_RES( ApplicationHouse )
-
-/* Bitmap resource : 'Application::ScreenOff' */
-EW_DECLARE_BITMAP_RES( ApplicationScreenOff )
-
-/* Bitmap resource : 'Application::ArrowLeft' */
-EW_DECLARE_BITMAP_RES( ApplicationArrowLeft )
-
-/* Bitmap resource : 'Application::ArrowRight' */
-EW_DECLARE_BITMAP_RES( ApplicationArrowRight )
-
-/* Font resource : 'Application::FontHeader' */
-EW_DECLARE_FONT_RES( ApplicationFontHeader )
-
-/* Font resource : 'Application::FontStatusBar' */
-EW_DECLARE_FONT_RES( ApplicationFontStatusBar )
-
-/* Font resource : 'Application::FontBodyL' */
-EW_DECLARE_FONT_RES( ApplicationFontBodyL )
-
-/* Font resource : 'Application::FontBodyM' */
-EW_DECLARE_FONT_RES( ApplicationFontBodyM )
-
-/* Font resource : 'Application::FontBodyS' */
-EW_DECLARE_FONT_RES( ApplicationFontBodyS )
-
-/* Font resource : 'Application::FontBottomNode' */
-EW_DECLARE_FONT_RES( ApplicationFontBottomNode )
-
-/* Bitmap resource : 'Application::DayTime' */
-EW_DECLARE_BITMAP_RES( ApplicationDayTime )
-
-/* Bitmap resource : 'Application::NightTime' */
-EW_DECLARE_BITMAP_RES( ApplicationNightTime )
-
-/* Bitmap resource : 'Application::Wireless' */
-EW_DECLARE_BITMAP_RES( ApplicationWireless )
-
-/* Bitmap resource : 'Application::Error' */
-EW_DECLARE_BITMAP_RES( ApplicationError )
-
-/* Bitmap resource : 'Application::PetrolCan' */
-EW_DECLARE_BITMAP_RES( ApplicationPetrolCan )
-
-/* Forward declaration of the class Effects::SlideTransition */
-#ifndef _EffectsSlideTransition_
-  EW_DECLARE_CLASS( EffectsSlideTransition )
-#define _EffectsSlideTransition_
-#endif
-
-/* User defined constant: 'Application::ColorWarning' */
-extern const XColor ApplicationColorWarning;
-
-/* User defined constant: 'Application::ColorCityPower' */
-extern const XColor ApplicationColorCityPower;
-
-/* User defined constant: 'Application::ColorGeneratorBackup' */
-extern const XColor ApplicationColorGeneratorBackup;
-
-/* User defined constant: 'Application::ColorSavingMode' */
-extern const XColor ApplicationColorSavingMode;
-
-/* User defined auto object: 'Application::SlideTop' */
-EW_DECLARE_AUTOOBJECT( ApplicationSlideTop, EffectsSlideTransition )
-
-/* User defined auto object: 'Application::SlideBottom' */
-EW_DECLARE_AUTOOBJECT( ApplicationSlideBottom, EffectsSlideTransition )
-
-/* User defined auto object: 'Application::SlideLeft' */
-EW_DECLARE_AUTOOBJECT( ApplicationSlideLeft, EffectsSlideTransition )
-
-/* User defined auto object: 'Application::SlideRight' */
-EW_DECLARE_AUTOOBJECT( ApplicationSlideRight, EffectsSlideTransition )
-
-/* User defined auto object: 'Application::Present' */
-EW_DECLARE_AUTOOBJECT( ApplicationPresent, EffectsSlideTransition )
-
-/* This object represents an instance of the device interface implemented in the 
-   class Application::DeviceClass. */
+/* Singleton instance of the device interface. */
 EW_DECLARE_AUTOOBJECT( ApplicationDevice, ApplicationDeviceClass )
-
-/* User defined auto object: 'Application::SettingsLocked' */
-EW_DECLARE_AUTOOBJECT( ApplicationSettingsLocked, ApplicationSettingsClass )
-
-/* User defined auto object: 'Application::SettingsModified' */
-EW_DECLARE_AUTOOBJECT( ApplicationSettingsModified, ApplicationSettingsClass )
 
 #ifdef __cplusplus
   }
