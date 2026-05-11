@@ -1,0 +1,7 @@
+﻿This file was created by fork_test.ps1 to verify the GitHub fork+PR workflow
+end-to-end. Feel free to close the PR without merging.
+
+Timestamp:   20260511-155626
+Branch:      fork-test-20260511-155626
+Fork:        https://github.com/Schwabano/ESP32-S3-Touch-LCD-4.3B
+Upstream:    https://github.com/EmbeddedWizardGUI/ESP32-S3-Touch-LCD-4.3B
