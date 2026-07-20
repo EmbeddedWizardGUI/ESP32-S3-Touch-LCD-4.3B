@@ -63,7 +63,7 @@ This repository contains a **maker-oriented Build Environment** for the Waveshar
 
 ### Prerequisites
 
-- **Embedded Wizard Studio V15.03** - [Download free of charge](https://get.embedded-wizard.de/data/15.00/EmbeddedWizard_Studio_x64-V15.03.msi)
+- **Embedded Wizard Studio V15.06** - [Download free of charge](https://get.embedded-wizard.de/data/15.00/EmbeddedWizard_Studio_x64-V15.06.msi)
 - **Waveshare ESP32-S3-Touch-LCD-4.3B** board with USB cable
 - **Espressif ESP-IDF v5.5.2**: the exact version this project was built and verified against. Installing a newer ESP-IDF release is at your own responsibility, as toolchain, component-manager, or API changes between releases may break the build. Install via the **VSCode extension** (recommended) or the **command-line toolchain**.
 
